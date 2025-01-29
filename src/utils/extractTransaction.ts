@@ -29,3 +29,34 @@ export const extractTransactionData = (text: string) => {
 
     return result as TransactionData;
 }
+
+interface RoadmapItem {
+    title: string;
+    description: string;
+  }
+  
+ export const extractArrayRoadmap = (responseText: string): RoadmapItem[] | null => {
+    try {
+      const match = responseText.match(/\[([\s\S]*)\]/);
+      if (!match) {
+        console.error("No array found in the response.");
+        return null;
+      }
+  
+      const arrayText = match[0];
+      const parsedArray: RoadmapItem[] = JSON.parse(arrayText);
+  
+      if (
+        Array.isArray(parsedArray) &&
+        parsedArray.every((item) => typeof item.title === "string" && typeof item.description === "string")
+      ) {
+        return parsedArray;
+      } else {
+        console.error("Invalid array structure.");
+        return null;
+      }
+    } catch (error) {
+      console.error("Failed to parse JSON array:", error);
+      return null;
+    }
+  }
