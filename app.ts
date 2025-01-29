@@ -10,6 +10,8 @@ import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import swaggerOptions from './swagger';
 import chat from './src/routes/chat'
+import quiz from './src/routes/quiz'
+
 import cors from "cors";
 
 
@@ -29,6 +31,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // Routes setup
 app.use('/api/auth', auth)
 app.use('/api/chat', chat)
+app.use('/api/quiz',quiz)
+
 
 
 // Start server

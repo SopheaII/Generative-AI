@@ -10,7 +10,7 @@ export const register = async (req: Request, res: Response) => {
 
   if (!name || !email || !password) {
     return res.status(500).json({
-      message: "something wrong",
+      message: "something wrong",  
     });
   }
 
