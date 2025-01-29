@@ -14,7 +14,7 @@ export const askQuery = async (req: Request, res: Response) => {
         await ollamaStream([{role: 'user', content: query}], res)
     }else {
         const response  = await ollamaNoStream([{role: 'user', content: query}])
-        res.status(200).json({ response: response.message.content }); 
+        res.status(200).json({ response: response.message.content });
     }
   } catch (error) {
     console.error(error);
