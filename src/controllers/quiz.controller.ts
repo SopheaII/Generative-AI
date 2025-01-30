@@ -5,6 +5,8 @@ import { UserInfo } from "../entity/user.entity";
 import ollama from 'ollama';
 import { ollamaNoStream, ollamaStream } from "../service/ollamaChat";
 import { extractQuizArray } from "../utils/extractarraytostrings";
+import { Like } from "typeorm";
+
 
 // POST: Create a new quiz
 
@@ -118,3 +120,36 @@ export const getQuizById = async (req: Request, res: Response) => {
     }
 };
 
+export const getByTopic = async (req: Request, res: Response) => {
+    const quizRepo = AppDataSource.getRepository(Quiz);
+    const keyword = req.query.keyword as string; // Ensure keyword is a string
+
+    console.log("Search keyword:", keyword);
+
+    if (!keyword) {
+        return res.status(400).json({ message: "Keyword is required" });
+    }
+
+    try {
+        // Use Like for partial text matching in TypeORM
+        const quizzes = await quizRepo.find({
+            where: { question: Like(`%${keyword}%`) }, // Search in `question`
+        });
+
+        if (!quizzes.length) {
+            return res.status(404).json({ message: "No quizzes found" });
+        }
+
+        return res.status(200).json({
+            quiz: quizzes.map(q => ({
+                id: q.id,
+                question: q.question,
+                options: q.options,
+                correctAnswer: q.correctAnswer,
+            })),
+        });
+    } catch (error) {
+        console.error("Error fetching quizzes:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+};
