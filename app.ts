@@ -4,6 +4,7 @@ import express from 'express';
 const app = express();
 import routes from './src/routes/api';
 import auth from "./src/routes/auth"
+import quiz from "./src/routes/quiz"
 import { AppDataSource } from './src/config/data-source';
 import { DataSource } from 'typeorm';
 import swaggerJsDoc from 'swagger-jsdoc';
@@ -29,6 +30,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // Routes setup
 app.use('/api/auth', auth)
 app.use('/api/chat', chat)
+app.use('/api/quiz' , quiz)
 
 
 // Start server
